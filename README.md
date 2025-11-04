@@ -1,66 +1,384 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# FoodBridge
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="https://img.shields.io/badge/Laravel-12-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel 12">
+  <img src="https://img.shields.io/badge/PHP-8.2+-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP 8.2+">
+  <img src="https://img.shields.io/badge/Tailwind_CSS-4.0-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS 4.0">
+  <img src="https://img.shields.io/badge/MySQL-8.2-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL 8.2">
 </p>
 
-## About Laravel
+## About FoodBridge
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+**FoodBridge** is a web-based platform designed to combat food waste by connecting food donors with beneficiaries in Al-Jouf, Saudi Arabia. Built as a Computer Science thesis project for Jouf University, this application aligns with **Saudi Vision 2030** sustainability goals by facilitating efficient food redistribution and reducing environmental impact.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+The platform creates a seamless ecosystem where:
+- **Donors** (restaurants, hotels, supermarkets, individuals) can post surplus food donations
+- **Beneficiaries** (charitable organizations, families in need) can request food assistance
+- **Volunteers** coordinate and manage food deliveries
+- **Administrators** oversee operations, generate reports, and ensure platform integrity
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Key Features
 
-## Learning Laravel
+### Multi-Role Authentication System
+- Four distinct user roles: Donor, Beneficiary, Volunteer, and Admin
+- Role-based access control with protected routes
+- Secure registration and login system
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Food Donation Management
+- Create, edit, and delete food donations
+- Track donation status (pending, scheduled, delivered)
+- Monitor food quantity and expiration dates
+- Real-time remaining quantity tracking
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Request Matching System
+- Automated matching between donations and beneficiary requests
+- Location-based coordination within Al-Jouf region
+- Smart matching algorithm considering food type, quantity, and availability
+- Real-time notifications for successful matches
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Delivery Coordination
+- Volunteer task assignment and management
+- Delivery status tracking (assigned, in progress, completed)
+- Pickup and drop-off location management
+- Task acceptance and completion workflow
 
-## Laravel Sponsors
+### Feedback & Rating System
+- User feedback collection after transactions
+- Rating system for quality assurance
+- Review history and statistics
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Admin Dashboard
+- Comprehensive system oversight
+- User management (create, edit, delete users)
+- Transaction monitoring and reporting
+- Feedback review and management
+- Role promotion capabilities
 
-### Premium Partners
+## Technology Stack
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### Backend
+- **Laravel 12** - PHP web application framework
+- **PHP 8.2+** - Server-side programming language
+- **MySQL 8.2** - Relational database management system
+- **Composer** - Dependency management for PHP
+
+### Frontend
+- **Blade Templates** - Laravel's templating engine
+- **Tailwind CSS 4.0** - Utility-first CSS framework
+- **Vite 6.0** - Modern frontend build tool
+- **JavaScript (Vanilla)** - Client-side scripting
+- **Axios** - HTTP client for API requests
+
+### Development Tools
+- **Laravel Pint** - Code style fixer
+- **Laravel Sail** - Docker development environment (optional)
+- **PHPUnit** - Testing framework
+- **Faker** - Test data generation
+- **Laravel Pail** - Log viewer
+
+## Prerequisites
+
+Before installing FoodBridge, ensure your system meets the following requirements:
+
+- **PHP** >= 8.2
+- **Composer** >= 2.0
+- **Node.js** >= 18.0 and npm
+- **MySQL** >= 8.0 or **MariaDB** >= 10.3
+- **Git**
+
+### PHP Extensions Required
+- BCMath PHP Extension
+- Ctype PHP Extension
+- cURL PHP Extension
+- DOM PHP Extension
+- Fileinfo PHP Extension
+- JSON PHP Extension
+- Mbstring PHP Extension
+- OpenSSL PHP Extension
+- PCRE PHP Extension
+- PDO PHP Extension
+- Tokenizer PHP Extension
+- XML PHP Extension
+
+## Installation
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/EngDawood/FoodBridge.git
+cd FoodBridge
+```
+
+### 2. Install PHP Dependencies
+
+```bash
+composer install
+```
+
+### 3. Install Node.js Dependencies
+
+```bash
+npm install
+```
+
+### 4. Environment Configuration
+
+Copy the example environment file and generate an application key:
+
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+### 5. Database Configuration
+
+Edit the `.env` file and configure your database connection:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=foodbridge
+DB_USERNAME=your_database_username
+DB_PASSWORD=your_database_password
+```
+
+### 6. Create Database
+
+Create a new MySQL database for the application:
+
+```bash
+mysql -u your_username -p
+```
+
+Then in MySQL console:
+
+```sql
+CREATE DATABASE foodbridge CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+EXIT;
+```
+
+### 7. Run Database Migrations and Seeders
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+This will create all necessary tables and populate them with sample data.
+
+### 8. Storage Link
+
+Create a symbolic link for file storage:
+
+```bash
+php artisan storage:link
+```
+
+### 9. Build Frontend Assets
+
+For development:
+```bash
+npm run dev
+```
+
+For production:
+```bash
+npm run build
+```
+
+## Running the Application
+
+### Development Server
+
+Start the Laravel development server:
+
+```bash
+php artisan serve
+```
+
+The application will be available at `http://localhost:8000`
+
+### Full Development Environment
+
+To run the complete development stack (server, queue, logs, and Vite):
+
+```bash
+composer run dev
+```
+
+This will start:
+- Laravel development server (port 8000)
+- Queue worker for background jobs
+- Laravel Pail for real-time log viewing
+- Vite development server with hot module replacement
+
+## Default User Accounts
+
+After running the seeders, you can login with these default accounts:
+
+### Admin Account
+- **Email**: admin@foodbridge.sa
+- **Password**: password
+
+### Donor Account
+- **Email**: donor@foodbridge.sa
+- **Password**: password
+
+### Beneficiary Account
+- **Email**: beneficiary@foodbridge.sa
+- **Password**: password
+
+### Volunteer Account
+- **Email**: volunteer@foodbridge.sa
+- **Password**: password
+
+## Development Workflow
+
+### Common Artisan Commands
+
+```bash
+# Clear application cache
+php artisan optimize:clear
+
+# Run database migrations
+php artisan migrate
+
+# Reset database and seed data
+php artisan migrate:fresh --seed
+
+# Run tests
+php artisan test
+
+# Code style fixing
+./vendor/bin/pint
+
+# Interactive PHP shell
+php artisan tinker
+```
+
+### Frontend Development
+
+```bash
+# Start Vite dev server with HMR
+npm run dev
+
+# Build production assets
+npm run build
+```
+
+## Project Structure
+
+```
+FoodBridge/
+├── app/
+│   ├── Contracts/Services/    # Service interfaces
+│   ├── Helpers/                # Helper functions
+│   ├── Http/
+│   │   ├── Controllers/        # Application controllers
+│   │   │   └── Admin/          # Admin-specific controllers
+│   │   └── Middleware/         # Custom middleware
+│   ├── Models/                 # Eloquent models
+│   ├── Providers/              # Service providers
+│   └── Services/               # Business logic services
+├── database/
+│   ├── factories/              # Model factories
+│   ├── migrations/             # Database migrations
+│   └── seeders/                # Database seeders
+├── resources/
+│   ├── css/                    # Stylesheets
+│   ├── js/                     # JavaScript files
+│   └── views/                  # Blade templates
+│       ├── admin/              # Admin interface
+│       ├── auth/               # Authentication views
+│       ├── beneficiary/        # Beneficiary interface
+│       ├── donor/              # Donor interface
+│       ├── layouts/            # Layout templates
+│       └── volunteer/          # Volunteer interface
+├── routes/
+│   ├── console.php             # Artisan commands
+│   └── web.php                 # Web routes
+└── tests/                      # Application tests
+```
+
+## Architecture Patterns
+
+### MVC Architecture
+The application follows Laravel's MVC pattern with clear separation of concerns.
+
+### Role-Based Access Control (RBAC)
+Routes are protected using custom middleware (`EnsureUserHasRole`) that validates user roles before granting access.
+
+### Service-Oriented Architecture
+Business logic is extracted into service classes:
+- **MatchingService** - Handles donation-to-request matching logic
+- **NotificationService** - Manages user notifications
+- Service contracts define interfaces for dependency injection
+
+### Repository Pattern
+Data access is abstracted through Eloquent models with proper relationships and foreign key constraints.
+
+## Database Schema
+
+### Core Tables
+- **users** - Multi-role user management
+- **donations** - Food donation records
+- **requests** - Beneficiary food requests
+- **delivery_tasks** - Volunteer delivery coordination
+- **feedback** - User ratings and feedback
+- **notifications** - System notifications
+- **reports** - Admin-generated reports
+
+## Testing
+
+Run the test suite:
+
+```bash
+php artisan test
+```
+
+Run tests with coverage:
+
+```bash
+php artisan test --coverage
+```
+
+## Code Quality
+
+Format code according to Laravel standards:
+
+```bash
+./vendor/bin/pint
+```
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+This is an academic project for Jouf University. If you'd like to contribute:
 
-## Code of Conduct
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Security
 
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+If you discover any security vulnerabilities, please email the development team immediately. Do not create public GitHub issues for security vulnerabilities.
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Acknowledgments
+
+- Jouf University Computer Science Department
+- Saudi Vision 2030 Sustainability Initiative
+- Laravel Framework
+- All contributors and testers
+
+## Contact
+
+**Project Repository**: [https://github.com/EngDawood/FoodBridge](https://github.com/EngDawood/FoodBridge)
+
+---
+
+Built with ❤️ for a sustainable future in Al-Jouf, Saudi Arabia
