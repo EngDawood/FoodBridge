@@ -10,8 +10,6 @@ class DeliveryTask extends Model
     use HasFactory;
 
     protected $fillable = [
-        'volunteer_id',
-        'donation_id',
         'pickup_location',
         'dropoff_location',
         'status',

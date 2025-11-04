@@ -18,6 +18,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Only seed test data in local/testing environments
+        if (!app()->environment(['local', 'testing'])) {
+            $this->command->warn('Seeding is disabled in production environment');
+            return;
+        }
+
         // Create Admin
         $admin = User::create([
             'name' => 'Admin User',

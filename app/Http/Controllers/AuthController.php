@@ -28,7 +28,7 @@ class AuthController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:6'],
+            'password' => ['required', 'string', 'min:8'],
             // Disallow self-assigning admin on signup 
             'role' => ['required', 'in:donor,beneficiary,volunteer'],
             'location' => ['nullable', 'string', 'max:255'],
@@ -137,19 +137,17 @@ class AuthController extends Controller
     public function updateProfile(Request $request)
     {
         $user = Auth::user();
-        
-        $validated = $request->validate([
+
+        // Base validation rules - never allow role changes via profile update
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $user->id],
             'location' => ['nullable', 'string', 'max:255'],
-            'role' => ['nullable', 'in:donor,beneficiary,volunteer,admin'],
-        ]);
+        ];
 
-        // Only allow role changes for admins
-        if (isset($validated['role']) && $user->role !== 'admin') {
-            unset($validated['role']);
-        }
+        $validated = $request->validate($rules);
 
+        // Explicitly prevent role changes - role updates should only happen via admin promotion
         $user->update($validated);
 
         return redirect()->route('profile')->with('status', 'Profile updated successfully');

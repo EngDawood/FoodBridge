@@ -12,11 +12,9 @@ class FoodRequest extends Model
     protected $table = 'requests';
 
     protected $fillable = [
-        'beneficiary_id',
         'food_type',
         'quantity',
         'note',
-        'donation_id',
         'status',
         'matched_at',
     ];

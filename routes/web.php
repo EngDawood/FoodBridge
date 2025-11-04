@@ -10,13 +10,24 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\FeedbackController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Authentication routes with rate limiting to prevent brute force attacks
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::post('/login', [AuthController::class, 'login'])
+    ->middleware('throttle:5,1')
+    ->name('login.post');
+
 // Role-specific login endpoints
 Route::get('/login/{role}', [AuthController::class, 'showLogin'])->name('login.role');
-Route::post('/login/{role}', [AuthController::class, 'loginForRole'])->name('login.role.post');
+Route::post('/login/{role}', [AuthController::class, 'loginForRole'])
+    ->middleware('throttle:5,1')
+    ->name('login.role.post');
+
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+Route::post('/register', [AuthController::class, 'register'])
+    ->middleware('throttle:3,1')
+    ->name('register.post');
+
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Fallback 404

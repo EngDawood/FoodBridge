@@ -236,16 +236,31 @@ class MatchingService
     protected function createMatch(Donation $donation, FoodRequest $request): FoodRequest
     {
         DB::transaction(function () use ($donation, $request) {
+            // Lock the donation row to prevent race conditions
+            $donation = Donation::where('id', $donation->id)->lockForUpdate()->first();
+
             // Ensure sufficient remaining quantity
             $available = $donation->remaining_quantity ?? $donation->quantity;
             if ($available < $request->quantity) {
                 throw new \RuntimeException('Insufficient remaining quantity');
             }
 
-            // Decrement remaining quantity and schedule donation
-            $donation->remaining_quantity = $available - $request->quantity;
-            $donation->status = 'scheduled';
-            $donation->save();
+            // Atomically decrement remaining quantity using database-level operation
+            $affected = DB::table('donations')
+                ->where('id', $donation->id)
+                ->where('remaining_quantity', '>=', $request->quantity)
+                ->update([
+                    'remaining_quantity' => DB::raw('remaining_quantity - ' . (int)$request->quantity),
+                    'status' => 'scheduled',
+                    'updated_at' => now(),
+                ]);
+
+            if ($affected === 0) {
+                throw new \RuntimeException('Failed to decrement quantity - insufficient remaining or concurrent modification');
+            }
+
+            // Refresh the model to get updated values
+            $donation->refresh();
 
             // Update request with donation link
             $request->update([

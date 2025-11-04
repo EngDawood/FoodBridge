@@ -22,7 +22,7 @@ class FeedbackController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'to_user_id' => ['required', 'exists:users,id', 'different:from_user_id'],
+            'to_user_id' => ['required', 'exists:users,id', 'not_in:' . Auth::id()],
             'rating' => ['required', 'integer', 'min:1', 'max:5'],
             'comment' => ['nullable', 'string', 'max:500'],
         ]);

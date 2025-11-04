@@ -20,34 +20,40 @@ The platform creates a seamless ecosystem where:
 ## Key Features
 
 ### Multi-Role Authentication System
+
 - Four distinct user roles: Donor, Beneficiary, Volunteer, and Admin
 - Role-based access control with protected routes
 - Secure registration and login system
 
 ### Food Donation Management
+
 - Create, edit, and delete food donations
 - Track donation status (pending, scheduled, delivered)
 - Monitor food quantity and expiration dates
 - Real-time remaining quantity tracking
 
 ### Request Matching System
+
 - Automated matching between donations and beneficiary requests
 - Location-based coordination within Al-Jouf region
 - Smart matching algorithm considering food type, quantity, and availability
 - Real-time notifications for successful matches
 
 ### Delivery Coordination
+
 - Volunteer task assignment and management
 - Delivery status tracking (assigned, in progress, completed)
 - Pickup and drop-off location management
 - Task acceptance and completion workflow
 
 ### Feedback & Rating System
+
 - User feedback collection after transactions
 - Rating system for quality assurance
 - Review history and statistics
 
 ### Admin Dashboard
+
 - Comprehensive system oversight
 - User management (create, edit, delete users)
 - Transaction monitoring and reporting
@@ -57,12 +63,14 @@ The platform creates a seamless ecosystem where:
 ## Technology Stack
 
 ### Backend
+
 - **Laravel 12** - PHP web application framework
 - **PHP 8.2+** - Server-side programming language
 - **MySQL 8.2** - Relational database management system
 - **Composer** - Dependency management for PHP
 
 ### Frontend
+
 - **Blade Templates** - Laravel's templating engine
 - **Tailwind CSS 4.0** - Utility-first CSS framework
 - **Vite 6.0** - Modern frontend build tool
@@ -70,6 +78,7 @@ The platform creates a seamless ecosystem where:
 - **Axios** - HTTP client for API requests
 
 ### Development Tools
+
 - **Laravel Pint** - Code style fixer
 - **Laravel Sail** - Docker development environment (optional)
 - **PHPUnit** - Testing framework
@@ -87,6 +96,7 @@ Before installing FoodBridge, ensure your system meets the following requirement
 - **Git**
 
 ### PHP Extensions Required
+
 - BCMath PHP Extension
 - Ctype PHP Extension
 - cURL PHP Extension
@@ -217,18 +227,22 @@ This will start:
 After running the seeders, you can login with these default accounts:
 
 ### Admin Account
+
 - **Email**: admin@foodbridge.sa
 - **Password**: password
 
 ### Donor Account
+
 - **Email**: donor@foodbridge.sa
 - **Password**: password
 
 ### Beneficiary Account
+
 - **Email**: beneficiary@foodbridge.sa
 - **Password**: password
 
 ### Volunteer Account
+
 - **Email**: volunteer@foodbridge.sa
 - **Password**: password
 
@@ -260,10 +274,10 @@ php artisan tinker
 
 ```bash
 # Start Vite dev server with HMR
-npm run dev
+bun run dev
 
 # Build production assets
-npm run build
+bun run build
 ```
 
 ## Project Structure
@@ -303,23 +317,28 @@ FoodBridge/
 ## Architecture Patterns
 
 ### MVC Architecture
+
 The application follows Laravel's MVC pattern with clear separation of concerns.
 
 ### Role-Based Access Control (RBAC)
+
 Routes are protected using custom middleware (`EnsureUserHasRole`) that validates user roles before granting access.
 
 ### Service-Oriented Architecture
+
 Business logic is extracted into service classes:
 - **MatchingService** - Handles donation-to-request matching logic
 - **NotificationService** - Manages user notifications
 - Service contracts define interfaces for dependency injection
 
 ### Repository Pattern
+
 Data access is abstracted through Eloquent models with proper relationships and foreign key constraints.
 
 ## Database Schema
 
 ### Core Tables
+
 - **users** - Multi-role user management
 - **donations** - Food donation records
 - **requests** - Beneficiary food requests

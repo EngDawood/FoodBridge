@@ -10,7 +10,6 @@ class Donation extends Model
     use HasFactory;
 
     protected $fillable = [
-        'donor_id',
         'food_type',
         'quantity',
         'remaining_quantity',
