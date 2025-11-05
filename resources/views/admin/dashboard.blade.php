@@ -16,7 +16,13 @@
             <span class="text-primary-100 text-xs font-semibold uppercase tracking-wider">Users</span>
         </div>
         <div class="text-3xl sm:text-4xl font-bold mb-1 sm:mb-2">{{ $totalUsers }}</div>
-        <div class="text-primary-100 text-xs sm:text-sm">Total registered users</div>
+        <div class="flex items-center justify-between">
+            <div class="text-primary-100 text-xs sm:text-sm">Total registered users</div>
+            <div class="flex items-center text-xs font-semibold {{ $usersTrend['direction'] === 'up' ? 'text-green-300' : 'text-red-300' }}">
+                <i class="fa-solid fa-arrow-{{ $usersTrend['direction'] }} mr-1"></i>
+                {{ $usersTrend['percentage'] }}%
+            </div>
+        </div>
     </div>
 
     <!-- Donations Card -->
@@ -28,8 +34,14 @@
             <span class="text-primary-100 text-xs font-semibold uppercase tracking-wider">Donations</span>
         </div>
         <div class="text-3xl sm:text-4xl font-bold mb-1 sm:mb-2">{{ $totalDonations }}</div>
-        <div class="text-primary-100 text-xs sm:text-sm">
-            <span class="font-semibold">{{ $deliveredDonations }}</span> delivered
+        <div class="flex items-center justify-between">
+            <div class="text-primary-100 text-xs sm:text-sm">
+                <span class="font-semibold">{{ $deliveredDonations }}</span> delivered
+            </div>
+            <div class="flex items-center text-xs font-semibold {{ $donationsTrend['direction'] === 'up' ? 'text-green-300' : 'text-red-300' }}">
+                <i class="fa-solid fa-arrow-{{ $donationsTrend['direction'] }} mr-1"></i>
+                {{ $donationsTrend['percentage'] }}%
+            </div>
         </div>
     </div>
 
@@ -56,7 +68,13 @@
             <span class="text-primary-100 text-xs font-semibold uppercase tracking-wider">Deliveries</span>
         </div>
         <div class="text-3xl sm:text-4xl font-bold mb-1 sm:mb-2">{{ $completedDeliveries }}</div>
-        <div class="text-primary-100 text-xs sm:text-sm">Completed tasks</div>
+        <div class="flex items-center justify-between">
+            <div class="text-primary-100 text-xs sm:text-sm">Completed tasks</div>
+            <div class="flex items-center text-xs font-semibold {{ $deliveriesTrend['direction'] === 'up' ? 'text-green-300' : 'text-red-300' }}">
+                <i class="fa-solid fa-arrow-{{ $deliveriesTrend['direction'] }} mr-1"></i>
+                {{ $deliveriesTrend['percentage'] }}%
+            </div>
+        </div>
     </div>
 
     <!-- Food Saved Card -->
@@ -81,6 +99,17 @@
         </div>
         <div class="text-3xl sm:text-4xl font-bold mb-1 sm:mb-2">{{ $beneficiariesHelped }}</div>
         <div class="text-white text-xs sm:text-sm opacity-90">People served</div>
+    </div>
+</div>
+
+<!-- Activity Chart Section -->
+<div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8">
+    <h2 class="text-lg sm:text-xl font-bold text-gray-800 mb-4 flex items-center">
+        <i class="fa-solid fa-chart-line text-accent-500 mr-2"></i>
+        7-Day Activity Overview
+    </h2>
+    <div class="relative" style="height: 300px;">
+        <canvas id="activityChart"></canvas>
     </div>
 </div>
 
@@ -136,5 +165,110 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('activityChart');
+    if (ctx) {
+        const chartData = @json($last7Days);
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: chartData.map(item => item.date),
+                datasets: [
+                    {
+                        label: 'Donations',
+                        data: chartData.map(item => item.donations),
+                        borderColor: 'rgb(99, 102, 241)',
+                        backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Requests',
+                        data: chartData.map(item => item.requests),
+                        borderColor: 'rgb(234, 179, 8)',
+                        backgroundColor: 'rgba(234, 179, 8, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Deliveries',
+                        data: chartData.map(item => item.deliveries),
+                        borderColor: 'rgb(34, 197, 94)',
+                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 15,
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        titleFont: {
+                            size: 14
+                        },
+                        bodyFont: {
+                            size: 13
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0,
+                            font: {
+                                size: 11
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 11
+                            }
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
+                }
+            }
+        });
+    }
+});
+</script>
+@endpush
 
 

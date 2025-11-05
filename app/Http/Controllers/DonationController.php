@@ -17,13 +17,43 @@ class DonationController extends Controller
         $this->matchingService = $matchingService;
     }
 
-    public function index() 
+    public function index()
     {
-        $donations = Donation::where('donor_id', Auth::id())
+        $userId = Auth::id();
+
+        // Get paginated donations list
+        $donations = Donation::where('donor_id', $userId)
             ->latest()
             ->paginate(10);
 
-        return view('donor.index', compact('donations'));
+        // Calculate statistics for dashboard cards
+        $totalDonations = Donation::where('donor_id', $userId)->count();
+        $activeDonations = Donation::where('donor_id', $userId)
+            ->whereIn('status', ['pending', 'scheduled'])
+            ->count();
+        $completedDonations = Donation::where('donor_id', $userId)
+            ->where('status', 'delivered')
+            ->count();
+
+        // Calculate average rating from feedback received as donor
+        $averageRating = \App\Models\Feedback::where('to_user_id', $userId)
+            ->avg('rating') ?? 0;
+
+        // Get recent activity - donations needing attention
+        $pendingDonations = Donation::where('donor_id', $userId)
+            ->where('status', 'pending')
+            ->latest()
+            ->take(5)
+            ->get();
+
+        return view('donor.index', compact(
+            'donations',
+            'totalDonations',
+            'activeDonations',
+            'completedDonations',
+            'averageRating',
+            'pendingDonations'
+        ));
     }
 
     public function create()
