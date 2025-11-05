@@ -15,6 +15,7 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
+        // Current statistics
         $totalUsers = User::count();
         $totalDonations = Donation::count();
         $deliveredDonations = Donation::where('status', 'delivered')->count();
@@ -25,6 +26,34 @@ class AdminController extends Controller
         $foodSavedQty = Donation::where('status', 'delivered')->sum('quantity');
         $beneficiariesHelped = FoodRequest::where('status', 'fulfilled')->distinct('beneficiary_id')->count('beneficiary_id');
 
+        // Previous period statistics (last 30 days vs previous 30 days)
+        $currentPeriodStart = now()->subDays(30);
+        $previousPeriodStart = now()->subDays(60);
+        $previousPeriodEnd = now()->subDays(30);
+
+        $usersThisPeriod = User::where('created_at', '>=', $currentPeriodStart)->count();
+        $usersPreviousPeriod = User::whereBetween('created_at', [$previousPeriodStart, $previousPeriodEnd])->count();
+        $usersTrend = $this->calculateTrend($usersThisPeriod, $usersPreviousPeriod);
+
+        $donationsThisPeriod = Donation::where('created_at', '>=', $currentPeriodStart)->count();
+        $donationsPreviousPeriod = Donation::whereBetween('created_at', [$previousPeriodStart, $previousPeriodEnd])->count();
+        $donationsTrend = $this->calculateTrend($donationsThisPeriod, $donationsPreviousPeriod);
+
+        $deliveriesThisPeriod = DeliveryTask::where('status', 'completed')->where('updated_at', '>=', $currentPeriodStart)->count();
+        $deliveriesPreviousPeriod = DeliveryTask::where('status', 'completed')->whereBetween('updated_at', [$previousPeriodStart, $previousPeriodEnd])->count();
+        $deliveriesTrend = $this->calculateTrend($deliveriesThisPeriod, $deliveriesPreviousPeriod);
+
+        // Chart data: Last 7 days activity
+        $last7Days = collect(range(6, 0))->map(function ($daysAgo) {
+            $date = now()->subDays($daysAgo);
+            return [
+                'date' => $date->format('M d'),
+                'donations' => Donation::whereDate('created_at', $date)->count(),
+                'requests' => FoodRequest::whereDate('created_at', $date)->count(),
+                'deliveries' => DeliveryTask::where('status', 'completed')->whereDate('updated_at', $date)->count(),
+            ];
+        });
+
         return view('admin.dashboard', compact(
             'totalUsers',
             'totalDonations',
@@ -33,8 +62,28 @@ class AdminController extends Controller
             'fulfilledRequests',
             'completedDeliveries',
             'foodSavedQty',
-            'beneficiariesHelped'
+            'beneficiariesHelped',
+            'usersTrend',
+            'donationsTrend',
+            'deliveriesTrend',
+            'last7Days'
         ));
+    }
+
+    /**
+     * Calculate trend percentage and direction
+     */
+    private function calculateTrend($current, $previous)
+    {
+        if ($previous == 0) {
+            return ['direction' => 'up', 'percentage' => $current > 0 ? 100 : 0];
+        }
+
+        $change = (($current - $previous) / $previous) * 100;
+        return [
+            'direction' => $change >= 0 ? 'up' : 'down',
+            'percentage' => abs(round($change, 1))
+        ];
     }
 
     public function users(Request $request)

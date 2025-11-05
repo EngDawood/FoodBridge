@@ -165,6 +165,8 @@
             <p>© {{ date('Y') }} FoodBridge</p>
         </div>
     </footer>
+
+    @stack('scripts')
 </body>
 </html>
 

@@ -19,11 +19,64 @@ class FoodRequestController extends Controller
 
     public function index()
     {
-        $requests = FoodRequest::where('beneficiary_id', Auth::id())
+        $userId = Auth::id();
+
+        // Get paginated requests list
+        $requests = FoodRequest::where('beneficiary_id', $userId)
             ->latest()
             ->paginate(10);
 
-        return view('beneficiary.index', compact('requests'));
+        // Calculate statistics
+        $totalRequests = FoodRequest::where('beneficiary_id', $userId)->count();
+        $pendingRequests = FoodRequest::where('beneficiary_id', $userId)
+            ->where('status', 'pending')
+            ->count();
+        $matchedRequests = FoodRequest::where('beneficiary_id', $userId)
+            ->where('status', 'matched')
+            ->count();
+        $fulfilledRequests = FoodRequest::where('beneficiary_id', $userId)
+            ->where('status', 'fulfilled')
+            ->count();
+
+        // Get requests with delivery tasks for upcoming pickups
+        $upcomingPickups = FoodRequest::where('beneficiary_id', $userId)
+            ->whereIn('status', ['matched', 'scheduled'])
+            ->whereHas('donation', function($query) {
+                $query->whereNotNull('pickup_time')
+                    ->where('pickup_time', '>=', now());
+            })
+            ->with(['donation' => function($query) {
+                $query->select('id', 'food_type', 'quantity', 'pickup_time', 'donor_id');
+            }])
+            ->latest()
+            ->take(5)
+            ->get();
+
+        // Get match suggestions - find available donations that match beneficiary's needs
+        $userRequests = FoodRequest::where('beneficiary_id', $userId)
+            ->where('status', 'pending')
+            ->get();
+
+        $matchSuggestions = [];
+        foreach ($userRequests as $request) {
+            $matches = $this->matchingService->findMatchingDonations($request, 3);
+            if ($matches->count() > 0) {
+                $matchSuggestions[] = [
+                    'request' => $request,
+                    'matches' => $matches
+                ];
+            }
+        }
+
+        return view('beneficiary.index', compact(
+            'requests',
+            'totalRequests',
+            'pendingRequests',
+            'matchedRequests',
+            'fulfilledRequests',
+            'upcomingPickups',
+            'matchSuggestions'
+        ));
     }
 
     public function create()

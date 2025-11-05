@@ -1,20 +1,100 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-    <h1 class="text-2xl font-bold">
-        <i class="fa-solid fa-hand-holding-heart mr-2"></i>My donations
-    </h1>
-    <a href="/donations/create" class="bg-accent-500 hover:brightness-95 text-white px-6 py-3 rounded-lg transition-colors min-h-[44px] flex items-center justify-center font-medium">
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
+    <div>
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
+            <i class="fa-solid fa-hand-holding-heart mr-2"></i>Donor Dashboard
+        </h1>
+        <p class="text-gray-600 text-sm sm:text-base">Track your donations and make a difference</p>
+    </div>
+    <a href="/donations/create" class="bg-accent-500 hover:brightness-95 text-white px-6 py-3 rounded-lg transition-colors min-h-[44px] flex items-center justify-center font-medium shadow-lg">
         <i class="fa-solid fa-plus mr-2"></i>Add donation
     </a>
 </div>
 
-<div class="mb-6 bg-white rounded-lg p-4 sm:p-6 shadow-lg">
-    <h2 class="font-semibold mb-2 flex items-center">
-        <i class="fa-solid fa-bell text-accent-500 mr-2"></i>Matching alerts
+<!-- Statistics Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+    <!-- Total Donations Card -->
+    <div class="bg-gradient-to-br from-primary-700 to-primary-500 rounded-xl shadow-lg p-5 sm:p-6 text-white transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+        <div class="flex items-center justify-between mb-3 sm:mb-4">
+            <div class="bg-white bg-opacity-20 rounded-lg p-2.5 sm:p-3">
+                <i class="fa-solid fa-hand-holding-heart text-xl sm:text-2xl"></i>
+            </div>
+            <span class="text-primary-100 text-xs font-semibold uppercase tracking-wider">Total</span>
+        </div>
+        <div class="text-3xl sm:text-4xl font-bold mb-1 sm:mb-2">{{ $totalDonations }}</div>
+        <div class="text-primary-100 text-xs sm:text-sm">Total donations posted</div>
+    </div>
+
+    <!-- Active Donations Card -->
+    <div class="bg-gradient-to-br from-accent-600 to-accent-400 rounded-xl shadow-lg p-5 sm:p-6 text-white transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+        <div class="flex items-center justify-between mb-3 sm:mb-4">
+            <div class="bg-white bg-opacity-20 rounded-lg p-2.5 sm:p-3">
+                <i class="fa-solid fa-clock text-xl sm:text-2xl"></i>
+            </div>
+            <span class="text-accent-100 text-xs font-semibold uppercase tracking-wider">Active</span>
+        </div>
+        <div class="text-3xl sm:text-4xl font-bold mb-1 sm:mb-2">{{ $activeDonations }}</div>
+        <div class="text-accent-100 text-xs sm:text-sm">Currently active</div>
+    </div>
+
+    <!-- Completed Donations Card -->
+    <div class="bg-gradient-to-br from-green-600 to-green-400 rounded-xl shadow-lg p-5 sm:p-6 text-white transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+        <div class="flex items-center justify-between mb-3 sm:mb-4">
+            <div class="bg-white bg-opacity-20 rounded-lg p-2.5 sm:p-3">
+                <i class="fa-solid fa-check-circle text-xl sm:text-2xl"></i>
+            </div>
+            <span class="text-green-100 text-xs font-semibold uppercase tracking-wider">Completed</span>
+        </div>
+        <div class="text-3xl sm:text-4xl font-bold mb-1 sm:mb-2">{{ $completedDonations }}</div>
+        <div class="text-green-100 text-xs sm:text-sm">Successfully delivered</div>
+    </div>
+
+    <!-- Average Rating Card -->
+    <div class="bg-gradient-to-br from-yellow-500 to-orange-400 rounded-xl shadow-lg p-5 sm:p-6 text-white transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+        <div class="flex items-center justify-between mb-3 sm:mb-4">
+            <div class="bg-white bg-opacity-20 rounded-lg p-2.5 sm:p-3">
+                <i class="fa-solid fa-star text-xl sm:text-2xl"></i>
+            </div>
+            <span class="text-yellow-100 text-xs font-semibold uppercase tracking-wider">Rating</span>
+        </div>
+        <div class="text-3xl sm:text-4xl font-bold mb-1 sm:mb-2">{{ number_format($averageRating, 1) }}</div>
+        <div class="text-yellow-100 text-xs sm:text-sm flex items-center">
+            <span class="mr-1">Average rating</span>
+            @for($i = 1; $i <= 5; $i++)
+                <i class="fa-solid fa-star text-xs {{ $i <= round($averageRating) ? 'text-yellow-200' : 'text-yellow-300 opacity-30' }}"></i>
+            @endfor
+        </div>
+    </div>
+</div>
+
+<div class="mb-6 bg-white rounded-lg p-4 sm:p-6 shadow-lg border-l-4 border-accent-500">
+    <h2 class="font-semibold mb-3 flex items-center text-lg">
+        <i class="fa-solid fa-bell text-accent-500 mr-2"></i>Recent Activity
     </h2>
-    <p class="text-sm text-gray-600">No alerts right now.</p>
+    @if($pendingDonations->count() > 0)
+    <div class="space-y-2">
+        @foreach($pendingDonations as $pending)
+        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+            <div class="flex items-center space-x-3">
+                <div class="bg-accent-100 rounded-full p-2">
+                    <i class="fa-solid fa-utensils text-accent-600"></i>
+                </div>
+                <div>
+                    <p class="font-medium text-gray-800">{{ \App\Helpers\FoodTypes::display($pending->food_type) }}</p>
+                    <p class="text-xs text-gray-500">{{ $pending->quantity }} units • {{ $pending->created_at->diffForHumans() }}</p>
+                </div>
+            </div>
+            <a href="{{ route('donations.matches', $pending) }}" class="text-accent-600 hover:text-accent-700 text-sm font-medium">
+                Find matches <i class="fa-solid fa-arrow-right ml-1"></i>
+            </a>
+        </div>
+        @endforeach
+    </div>
+    @else
+    <p class="text-sm text-gray-600">No pending donations. All caught up!</p>
+    @endif
 </div>
 
 <div class="bg-white rounded-lg p-4 sm:p-6 shadow-lg">
