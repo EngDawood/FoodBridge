@@ -1,0 +1,141 @@
+name: Update Changelog
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+jobs:
+  update-changelog:
+    name: Update Changelog
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || (github.event.pull_request.merged == true)
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get latest tag
+        id: latest-tag
+        run: |
+          git fetch --tags
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.1.0")
+          echo "tag=$LATEST_TAG" >> $GITHUB_OUTPUT
+          echo "Latest tag: $LATEST_TAG"
+
+      - name: Generate changelog content
+        id: changelog
+        run: |
+          # Get commits since last tag
+          LATEST_TAG="${{ steps.latest-tag.outputs.tag }}"
+
+          # Create temporary changelog
+          echo "## [Unreleased]" > temp_changelog.md
+          echo "" >> temp_changelog.md
+
+          # Function to categorize commits
+          categorize_commits() {
+            local category=$1
+            local pattern=$2
+            local commits=$(git log $LATEST_TAG..HEAD --pretty=format:"- %s (%h)" --grep="$pattern" -i)
+
+            if [ ! -z "$commits" ]; then
+              echo "" >> temp_changelog.md
+              echo "### $category" >> temp_changelog.md
+              echo "" >> temp_changelog.md
+              echo "$commits" >> temp_changelog.md
+            fi
+          }
+
+          # Categorize commits by conventional commit types
+          categorize_commits "Added" "^feat"
+          categorize_commits "Fixed" "^fix"
+          categorize_commits "Changed" "^refactor"
+          categorize_commits "Security" "^security"
+          categorize_commits "Deprecated" "^deprecate"
+          categorize_commits "Removed" "^remove"
+          categorize_commits "Performance" "^perf"
+          categorize_commits "Documentation" "^docs"
+
+          # Get all other commits not matching patterns
+          OTHER_COMMITS=$(git log $LATEST_TAG..HEAD --pretty=format:"- %s (%h)" --invert-grep --grep="^feat" --grep="^fix" --grep="^refactor" --grep="^security" --grep="^deprecate" --grep="^remove" --grep="^perf" --grep="^docs")
+
+          if [ ! -z "$OTHER_COMMITS" ]; then
+            echo "" >> temp_changelog.md
+            echo "### Other Changes" >> temp_changelog.md
+            echo "" >> temp_changelog.md
+            echo "$OTHER_COMMITS" >> temp_changelog.md
+          fi
+
+          # If no commits found, add a note
+          if [ ! -s temp_changelog.md ] || [ $(wc -l < temp_changelog.md) -le 2 ]; then
+            echo "" >> temp_changelog.md
+            echo "- No significant changes" >> temp_changelog.md
+          fi
+
+      - name: Update CHANGELOG.md
+        run: |
+          # Check if there are new changes
+          if [ -f temp_changelog.md ]; then
+            # Read the existing changelog
+            if [ -f CHANGELOG.md ]; then
+              # Find the line number where [Unreleased] section ends
+              # We'll replace the [Unreleased] section with the new content
+
+              # Create new changelog with header
+              head -n 8 CHANGELOG.md > new_changelog.md
+
+              # Add the new unreleased content
+              cat temp_changelog.md >> new_changelog.md
+              echo "" >> new_changelog.md
+
+              # Add the rest of the changelog (skip old unreleased section)
+              sed -n '/^## \[0\./,$p' CHANGELOG.md >> new_changelog.md
+
+              # Replace the old changelog
+              mv new_changelog.md CHANGELOG.md
+            else
+              # Create new changelog if it doesn't exist
+              echo "# Changelog" > CHANGELOG.md
+              echo "" >> CHANGELOG.md
+              echo "All notable changes to the FoodBridge project will be documented in this file." >> CHANGELOG.md
+              echo "" >> CHANGELOG.md
+              echo "The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)," >> CHANGELOG.md
+              echo "and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html)." >> CHANGELOG.md
+              echo "" >> CHANGELOG.md
+              cat temp_changelog.md >> CHANGELOG.md
+            fi
+
+            rm -f temp_changelog.md
+          fi
+
+      - name: Check for changes
+        id: check-changes
+        run: |
+          if git diff --quiet CHANGELOG.md; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "No changes to commit"
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "Changes detected in CHANGELOG.md"
+          fi
+
+      - name: Commit changelog updates
+        if: steps.check-changes.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add CHANGELOG.md
+          git commit -m "docs: update CHANGELOG.md with latest changes [skip ci]"
+          git push

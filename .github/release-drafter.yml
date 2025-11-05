@@ -1,0 +1,88 @@
+name-template: 'v$RESOLVED_VERSION'
+tag-template: 'v$RESOLVED_VERSION'
+categories:
+  - title: '🚀 Features'
+    labels:
+      - 'feature'
+      - 'enhancement'
+      - 'feat'
+  - title: '🐛 Bug Fixes'
+    labels:
+      - 'fix'
+      - 'bugfix'
+      - 'bug'
+  - title: '🔒 Security'
+    labels:
+      - 'security'
+  - title: '📚 Documentation'
+    labels:
+      - 'documentation'
+      - 'docs'
+  - title: '🧰 Maintenance'
+    labels:
+      - 'chore'
+      - 'maintenance'
+  - title: '⚡ Performance'
+    labels:
+      - 'performance'
+      - 'perf'
+  - title: '♻️ Refactoring'
+    labels:
+      - 'refactor'
+  - title: '🗑️ Deprecated'
+    labels:
+      - 'deprecated'
+
+change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
+change-title-escapes: '\<*_&'
+
+version-resolver:
+  major:
+    labels:
+      - 'major'
+      - 'breaking'
+  minor:
+    labels:
+      - 'minor'
+      - 'feature'
+      - 'enhancement'
+  patch:
+    labels:
+      - 'patch'
+      - 'fix'
+      - 'bugfix'
+      - 'security'
+  default: patch
+
+template: |
+  ## What's Changed
+
+  $CHANGES
+
+  **Full Changelog**: https://github.com/$OWNER/$REPOSITORY/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION
+
+autolabeler:
+  - label: 'feature'
+    title:
+      - '/^feat(\(.*\))?:/i'
+  - label: 'fix'
+    title:
+      - '/^fix(\(.*\))?:/i'
+  - label: 'security'
+    title:
+      - '/^security(\(.*\))?:/i'
+  - label: 'documentation'
+    title:
+      - '/^docs(\(.*\))?:/i'
+  - label: 'chore'
+    title:
+      - '/^chore(\(.*\))?:/i'
+  - label: 'refactor'
+    title:
+      - '/^refactor(\(.*\))?:/i'
+  - label: 'performance'
+    title:
+      - '/^perf(\(.*\))?:/i'
+  - label: 'deprecated'
+    title:
+      - '/^deprecate(\(.*\))?:/i'
