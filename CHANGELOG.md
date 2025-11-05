@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Claude Code on the web integration**
+  - Added `.claude/settings.json` with SessionStart hook configuration
+  - Created `scripts/claude-setup.sh` for automatic environment setup in cloud sessions
+  - Automated Composer dependency installation
+  - Automated npm dependency installation
+  - Automatic `.env` file creation from `.env.example`
+  - Automatic Laravel application key generation
+  - Automatic Laravel cache clearing
+  - Script only runs in remote (web) environments, skips local development
+  - Impact: Enables seamless development with Claude Code on claude.ai/code
+  - Files: `.claude/settings.json`, `scripts/claude-setup.sh`
+
+- **Claude Code agent configurations**
+  - Added specialized agent definitions for Laravel, Vue, React, and universal development
+  - Includes: laravel-backend-expert, laravel-eloquent-expert, vue-component-architect, react-component-architect
+  - Core agents: code-archaeologist, code-reviewer, documentation-specialist, performance-optimizer
+  - Universal agents: frontend-developer, backend-developer, api-architect, tailwind-css-expert
+  - Enables efficient task delegation to specialized AI agents
+  - Location: `.claude/agents/`
+
 ## [0.2.0] - 2025-11-05
 
 ### Security
