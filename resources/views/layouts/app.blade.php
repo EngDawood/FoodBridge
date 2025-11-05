@@ -60,7 +60,7 @@
             <div id="mobile-overlay" class="absolute inset-0 bg-black opacity-0 transition-opacity duration-300"></div>
 
             <!-- Drawer -->
-            <nav id="mobile-nav" class="absolute top-0 right-0 h-full w-64 bg-primary-900 shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto">
+            <nav id="mobile-nav" class="absolute top-0 right-0 h-full w-72 sm:w-80 max-w-[85vw] bg-primary-900 shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto">
                 <div class="p-6">
                     <!-- Close Button -->
                     <button id="mobile-close-button" class="absolute top-4 right-4 text-white min-w-[44px] min-h-[44px] flex items-center justify-center" aria-label="Close menu">
@@ -70,48 +70,48 @@
                     <!-- Mobile Menu Items -->
                     <div class="flex flex-col space-y-4 mt-12">
                         <a href="/" class="text-white hover:text-primary-100 py-3 px-4 rounded hover:bg-primary-800 transition-colors min-h-[44px] flex items-center">
-                            <i class="fa-solid fa-house mr-3 w-5"></i>Home
+                            <i class="fa-solid fa-house fa-fw mr-3"></i>Home
                         </a>
 
                         @auth
                             @if(auth()->user()->role === 'admin')
                                 <a href="/admin" class="text-white hover:text-primary-100 py-3 px-4 rounded hover:bg-primary-800 transition-colors min-h-[44px] flex items-center">
-                                    <i class="fa-solid fa-gauge mr-3 w-5"></i>Dashboard
+                                    <i class="fa-solid fa-gauge fa-fw mr-3"></i>Dashboard
                                 </a>
                                 <a href="/admin/users" class="text-white hover:text-primary-100 py-3 px-4 rounded hover:bg-primary-800 transition-colors min-h-[44px] flex items-center">
-                                    <i class="fa-solid fa-users mr-3 w-5"></i>Users
+                                    <i class="fa-solid fa-users fa-fw mr-3"></i>Users
                                 </a>
                                 <a href="/admin/transactions" class="text-white hover:text-primary-100 py-3 px-4 rounded hover:bg-primary-800 transition-colors min-h-[44px] flex items-center">
-                                    <i class="fa-solid fa-exchange-alt mr-3 w-5"></i>Transactions
+                                    <i class="fa-solid fa-exchange-alt fa-fw mr-3"></i>Transactions
                                 </a>
                                 <a href="/admin/reports" class="text-white hover:text-primary-100 py-3 px-4 rounded hover:bg-primary-800 transition-colors min-h-[44px] flex items-center">
-                                    <i class="fa-solid fa-file-alt mr-3 w-5"></i>Reports
+                                    <i class="fa-solid fa-file-alt fa-fw mr-3"></i>Reports
                                 </a>
                                 <a href="/admin/feedback" class="text-white hover:text-primary-100 py-3 px-4 rounded hover:bg-primary-800 transition-colors min-h-[44px] flex items-center">
-                                    <i class="fa-solid fa-comments mr-3 w-5"></i>Feedback
+                                    <i class="fa-solid fa-comments fa-fw mr-3"></i>Feedback
                                 </a>
                             @elseif(auth()->user()->role === 'donor')
                                 <a href="/donations" class="text-white hover:text-primary-100 py-3 px-4 rounded hover:bg-primary-800 transition-colors min-h-[44px] flex items-center">
-                                    <i class="fa-solid fa-hand-holding-heart mr-3 w-5"></i>My Donations
+                                    <i class="fa-solid fa-hand-holding-heart fa-fw mr-3"></i>My Donations
                                 </a>
                             @elseif(auth()->user()->role === 'beneficiary')
                                 <a href="/requests" class="text-white hover:text-primary-100 py-3 px-4 rounded hover:bg-primary-800 transition-colors min-h-[44px] flex items-center">
-                                    <i class="fa-solid fa-clipboard-list mr-3 w-5"></i>My Requests
+                                    <i class="fa-solid fa-clipboard-list fa-fw mr-3"></i>My Requests
                                 </a>
                             @elseif(auth()->user()->role === 'volunteer')
                                 <a href="/volunteer/available" class="text-white hover:text-primary-100 py-3 px-4 rounded hover:bg-primary-800 transition-colors min-h-[44px] flex items-center">
-                                    <i class="fa-solid fa-tasks mr-3 w-5"></i>Available Tasks
+                                    <i class="fa-solid fa-tasks fa-fw mr-3"></i>Available Tasks
                                 </a>
                                 <a href="/volunteer/my-tasks" class="text-white hover:text-primary-100 py-3 px-4 rounded hover:bg-primary-800 transition-colors min-h-[44px] flex items-center">
-                                    <i class="fa-solid fa-clipboard-check mr-3 w-5"></i>My Tasks
+                                    <i class="fa-solid fa-clipboard-check fa-fw mr-3"></i>My Tasks
                                 </a>
                             @endif
 
                             <a href="/profile" class="text-white hover:text-primary-100 py-3 px-4 rounded hover:bg-primary-800 transition-colors min-h-[44px] flex items-center">
-                                <i class="fa-solid fa-user mr-3 w-5"></i>Profile
+                                <i class="fa-solid fa-user fa-fw mr-3"></i>Profile
                             </a>
                             <a href="/notifications" class="text-white hover:text-primary-100 py-3 px-4 rounded hover:bg-primary-800 transition-colors min-h-[44px] flex items-center">
-                                <i class="fa-solid fa-bell mr-3 w-5"></i>Notifications
+                                <i class="fa-solid fa-bell fa-fw mr-3"></i>Notifications
                             </a>
 
                             <div class="border-t border-primary-700 my-4"></div>
@@ -123,7 +123,7 @@
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <button class="w-full text-left text-white hover:text-primary-100 py-3 px-4 rounded hover:bg-primary-800 transition-colors min-h-[44px] flex items-center">
-                                    <i class="fa-solid fa-right-from-bracket mr-3 w-5"></i>Log out
+                                    <i class="fa-solid fa-right-from-bracket fa-fw mr-3"></i>Log out
                                 </button>
                             </form>
                         @endauth
@@ -132,22 +132,22 @@
                             <div class="border-t border-primary-700 my-4"></div>
                             <div class="text-primary-100 text-sm px-4 mb-2">Login as:</div>
                             <a href="/login/admin" class="text-white hover:text-primary-100 py-3 px-4 rounded hover:bg-primary-800 transition-colors min-h-[44px] flex items-center">
-                                <i class="fa-solid fa-user-shield mr-3 w-5"></i>Admin
+                                <i class="fa-solid fa-user-shield fa-fw mr-3"></i>Admin
                             </a>
                             <a href="/login/donor" class="text-white hover:text-primary-100 py-3 px-4 rounded hover:bg-primary-800 transition-colors min-h-[44px] flex items-center">
-                                <i class="fa-solid fa-hand-holding-heart mr-3 w-5"></i>Donor
+                                <i class="fa-solid fa-hand-holding-heart fa-fw mr-3"></i>Donor
                             </a>
                             <a href="/login/beneficiary" class="text-white hover:text-primary-100 py-3 px-4 rounded hover:bg-primary-800 transition-colors min-h-[44px] flex items-center">
-                                <i class="fa-solid fa-users mr-3 w-5"></i>Beneficiary
+                                <i class="fa-solid fa-users fa-fw mr-3"></i>Beneficiary
                             </a>
                             <a href="/login/volunteer" class="text-white hover:text-primary-100 py-3 px-4 rounded hover:bg-primary-800 transition-colors min-h-[44px] flex items-center">
-                                <i class="fa-solid fa-hands-helping mr-3 w-5"></i>Volunteer
+                                <i class="fa-solid fa-hands-helping fa-fw mr-3"></i>Volunteer
                             </a>
 
                             <div class="border-t border-primary-700 my-4"></div>
 
                             <a href="/register" class="text-white bg-accent-500 hover:bg-accent-600 py-3 px-4 rounded transition-colors min-h-[44px] flex items-center justify-center font-semibold">
-                                <i class="fa-solid fa-user-plus mr-2"></i>Create account
+                                <i class="fa-solid fa-user-plus fa-fw mr-2"></i>Create account
                             </a>
                         @endguest
                     </div>
@@ -155,58 +155,6 @@
             </nav>
         </div>
     </header>
-
-    <script>
-        // Mobile menu toggle functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuButton = document.getElementById('mobile-menu-button');
-            const closeButton = document.getElementById('mobile-close-button');
-            const drawer = document.getElementById('mobile-drawer');
-            const nav = document.getElementById('mobile-nav');
-            const overlay = document.getElementById('mobile-overlay');
-
-            function openMenu() {
-                drawer.classList.remove('pointer-events-none');
-                drawer.classList.add('pointer-events-auto');
-                overlay.classList.remove('opacity-0');
-                overlay.classList.add('opacity-50');
-                nav.classList.remove('translate-x-full');
-                nav.classList.add('translate-x-0');
-                document.body.style.overflow = 'hidden';
-            }
-
-            function closeMenu() {
-                overlay.classList.remove('opacity-50');
-                overlay.classList.add('opacity-0');
-                nav.classList.remove('translate-x-0');
-                nav.classList.add('translate-x-full');
-                document.body.style.overflow = '';
-                setTimeout(() => {
-                    drawer.classList.remove('pointer-events-auto');
-                    drawer.classList.add('pointer-events-none');
-                }, 300);
-            }
-
-            if (menuButton) {
-                menuButton.addEventListener('click', openMenu);
-            }
-
-            if (closeButton) {
-                closeButton.addEventListener('click', closeMenu);
-            }
-
-            if (overlay) {
-                overlay.addEventListener('click', closeMenu);
-            }
-
-            // Close menu on escape key
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    closeMenu();
-                }
-            });
-        });
-    </script>
 
     <main class="max-w-6xl mx-auto px-4 py-8 flex-1 w-full">
         @yield('content')
