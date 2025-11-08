@@ -231,20 +231,25 @@ After running the seeders, you can login with these default accounts:
 - **Email**: admin@foodbridge.sa
 - **Password**: password
 
-### Donor Account
+### Donor Accounts
 
-- **Email**: donor@foodbridge.sa
-- **Password**: password
+- **Email**: nora@foodbridge.sa (نورة عبدالعزيز)
+- **Email**: khaled@foodbridge.sa (خالد محمد)
+- **Email**: alkheir@foodbridge.sa (مطعم الخير)
+- **Password**: password (for all)
 
-### Beneficiary Account
+### Beneficiary Accounts
 
-- **Email**: beneficiary@foodbridge.sa
-- **Password**: password
+- **Email**: fatima@foodbridge.sa (فاطمة أحمد)
+- **Email**: abdullah@foodbridge.sa (عبدالله سعيد)
+- **Email**: maryam@foodbridge.sa (مريم حسن)
+- **Password**: password (for all)
 
-### Volunteer Account
+### Volunteer Accounts
 
-- **Email**: volunteer@foodbridge.sa
-- **Password**: password
+- **Email**: mohammed@foodbridge.sa (محمد العنزي)
+- **Email**: sara@foodbridge.sa (سارة الشمري)
+- **Password**: password (for all)
 
 ## Development Workflow
 
