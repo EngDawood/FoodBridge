@@ -180,8 +180,30 @@ class AdminController extends Controller
 
     public function reportsIndex()
     {
-        $reports = Report::orderBy('created_at', 'desc')->paginate(10);
+        $reports = Report::with('admin:id,name')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
         return view('admin.reports.index', compact('reports'));
+    }
+
+    public function reportsShow(Report $report)
+    {
+        $report->load('admin:id,name');
+        return view('admin.reports.show', compact('report'));
+    }
+
+    public function reportsDownload(Report $report)
+    {
+        $filename = 'report_' . $report->id . '_' . date('Y-m-d_His') . '.txt';
+        $content = "Report: {$report->title}\n";
+        $content .= "Created by: {$report->admin->name}\n";
+        $content .= "Date: " . $report->created_at->format('Y-m-d H:i:s') . "\n";
+        $content .= "\n" . str_repeat('=', 60) . "\n\n";
+        $content .= $report->content;
+
+        return response()->streamDownload(function () use ($content) {
+            echo $content;
+        }, $filename);
     }
 
     public function reportsCreate()
@@ -193,7 +215,7 @@ class AdminController extends Controller
     {
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'content' => ['required', 'string'],
+            'content' => ['required', 'string', 'max:5000'],
         ]);
 
         $data['admin_id'] = auth()->id();

@@ -65,9 +65,9 @@ class DonationController extends Controller
     {
         $validated = $request->validate([
             'food_type' => ['required', 'string', 'in:' . implode(',', \App\Helpers\FoodTypes::values())],
-            'quantity' => ['required', 'integer', 'min:1'],
-            'expiration_date' => ['nullable', 'date'],
-            'pickup_time' => ['nullable', 'date'],
+            'quantity' => ['required', 'integer', 'min:1', 'max:10000'],
+            'expiration_date' => ['nullable', 'date', 'after_or_equal:today'],
+            'pickup_time' => ['nullable', 'date', 'after_or_equal:today'],
         ]);
 
         $donation = Donation::create([
@@ -82,7 +82,7 @@ class DonationController extends Controller
         // Try to find a match automatically
         $match = $this->matchingService->matchDonation($donation);
 
-        $message = $match 
+        $message = $match
             ? 'Donation added and matched with a beneficiary request'
             : 'Donation added successfully';
 
@@ -101,9 +101,9 @@ class DonationController extends Controller
 
         $validated = $request->validate([
             'food_type' => ['required', 'string', 'in:' . implode(',', \App\Helpers\FoodTypes::values())],
-            'quantity' => ['required', 'integer', 'min:1'],
-            'expiration_date' => ['nullable', 'date'],
-            'pickup_time' => ['nullable', 'date'],
+            'quantity' => ['required', 'integer', 'min:1', 'max:10000'],
+            'expiration_date' => ['nullable', 'date', 'after_or_equal:today'],
+            'pickup_time' => ['nullable', 'date', 'after_or_equal:today'],
             'status' => ['nullable', 'in:pending,scheduled,delivered'],
         ]);
 

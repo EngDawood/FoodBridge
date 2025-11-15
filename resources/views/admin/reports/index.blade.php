@@ -18,6 +18,7 @@
                 <th class="p-2 text-right"><i class="fa-solid fa-file-alt mr-1"></i>Title</th>
                 <th class="p-2 text-right"><i class="fa-solid fa-user-shield mr-1"></i>Admin</th>
                 <th class="p-2 text-right"><i class="fa-solid fa-calendar mr-1"></i>Date</th>
+                <th class="p-2 text-center"><i class="fa-solid fa-cogs mr-1"></i>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -27,6 +28,10 @@
                 <td class="p-2">{{ $report->title }}</td>
                 <td class="p-2">{{ optional($report->admin)->name ?? '-' }}</td>
                 <td class="p-2">{{ optional($report->created_at)->format('Y-m-d H:i') }}</td>
+                <td class="p-2 text-center">
+                    <a href="{{ route('admin.reports.show', $report) }}" class="text-blue-600 hover:text-blue-800 mr-2"><i class="fa-solid fa-eye"></i></a>
+                    <a href="{{ route('admin.reports.download', $report) }}" class="text-green-600 hover:text-green-800"><i class="fa-solid fa-download"></i></a>
+                </td>
             </tr>
             @endforeach
         </tbody>

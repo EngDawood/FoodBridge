@@ -88,8 +88,8 @@ class FoodRequestController extends Controller
     {
         $validated = $request->validate([
             'food_type' => ['required', 'string', 'in:' . implode(',', \App\Helpers\FoodTypes::values())],
-            'quantity' => ['required', 'integer', 'min:1'],
-            'note' => ['nullable', 'string'],
+            'quantity' => ['required', 'integer', 'min:1', 'max:10000'],
+            'note' => ['nullable', 'string', 'max:500'],
         ]);
 
         $foodRequest = FoodRequest::create([
@@ -103,7 +103,7 @@ class FoodRequestController extends Controller
         // Try to find a matching donation
         $match = $this->matchingService->matchRequest($foodRequest);
 
-        $message = $match 
+        $message = $match
             ? 'Request created and matched with an available donation'
             : 'Request created successfully';
 
@@ -122,8 +122,8 @@ class FoodRequestController extends Controller
 
         $validated = $request->validate([
             'food_type' => ['required', 'string', 'in:' . implode(',', \App\Helpers\FoodTypes::values())],
-            'quantity' => ['required', 'integer', 'min:1'],
-            'note' => ['nullable', 'string'],
+            'quantity' => ['required', 'integer', 'min:1', 'max:10000'],
+            'note' => ['nullable', 'string', 'max:500'],
             'status' => ['nullable', 'in:pending,matched,fulfilled'],
         ]);
 
