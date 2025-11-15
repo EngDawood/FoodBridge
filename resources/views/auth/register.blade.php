@@ -40,7 +40,12 @@
             <label class="block mb-2 text-sm font-medium text-gray-700">
                 <i class="fa-solid fa-lock mr-1 text-primary-700"></i>Password
             </label>
-            <input name="password" type="password" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all" required>
+            <div class="relative">
+                <input id="register-password" name="password" type="password" class="w-full border border-gray-300 rounded-lg px-4 py-3 pr-12 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all" required>
+                <button type="button" id="register-password-toggle" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors">
+                    <i class="fa-solid fa-eye"></i>
+                </button>
+            </div>
         </div>
         <div class="mb-4">
             <label class="block mb-2 text-sm font-medium text-gray-700">
@@ -65,4 +70,28 @@
 </div>
 @endsection
 
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const registerPasswordInput = document.getElementById('register-password');
+    const registerPasswordToggle = document.getElementById('register-password-toggle');
 
+    if (registerPasswordToggle && registerPasswordInput) {
+        registerPasswordToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            const isPassword = registerPasswordInput.type === 'password';
+            registerPasswordInput.type = isPassword ? 'text' : 'password';
+
+            const icon = registerPasswordToggle.querySelector('i');
+            if (isPassword) {
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+    }
+});
+</script>
+@endpush

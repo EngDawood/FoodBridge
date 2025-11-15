@@ -43,7 +43,12 @@
             <label class="block mb-2 text-sm font-medium text-gray-700">
                 <i class="fa-solid fa-lock mr-1 text-primary-700"></i>Password
             </label>
-            <input name="password" type="password" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all" required>
+            <div class="relative">
+                <input id="login-password" name="password" type="password" class="w-full border border-gray-300 rounded-lg px-4 py-3 pr-12 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all" required>
+                <button type="button" id="login-password-toggle" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors">
+                    <i class="fa-solid fa-eye"></i>
+                </button>
+            </div>
             @error('password')
                 <p class="text-red-600 text-sm mt-2">{{ $message }}</p>
             @enderror
@@ -59,4 +64,28 @@
 </div>
 @endsection
 
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const loginPasswordInput = document.getElementById('login-password');
+    const loginPasswordToggle = document.getElementById('login-password-toggle');
 
+    if (loginPasswordToggle && loginPasswordInput) {
+        loginPasswordToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            const isPassword = loginPasswordInput.type === 'password';
+            loginPasswordInput.type = isPassword ? 'text' : 'password';
+
+            const icon = loginPasswordToggle.querySelector('i');
+            if (isPassword) {
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+    }
+});
+</script>
+@endpush
