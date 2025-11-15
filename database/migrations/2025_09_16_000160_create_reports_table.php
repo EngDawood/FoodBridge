@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('admin_id')->constrained('users')->cascadeOnDelete();
             $table->string('title', 255);
             $table->text('content');
-            $table->dateTime('created_at');
+            $table->timestamps();
         });
     }
 

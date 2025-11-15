@@ -9,17 +9,15 @@ class Report extends Model
 {
     use HasFactory;
 
-    public $timestamps = false;
-
     protected $fillable = [
         'admin_id',
         'title',
         'content',
-        'created_at',
     ];
 
     protected $casts = [
         'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     public function admin()

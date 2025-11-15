@@ -7,16 +7,6 @@
     @csrf
 
     <div class="mb-3">
-        <label class="block mb-1"><i class="fa-solid fa-user-shield mr-1"></i>Admin</label>
-        <select name="admin_id" class="border rounded px-3 py-2 w-full">
-            @foreach($admins as $admin)
-                <option value="{{ $admin->id }}">{{ $admin->name }}</option>
-            @endforeach
-        </select>
-        @error('admin_id')<div class="text-red-600 text-sm">{{ $message }}</div>@enderror
-    </div>
-
-    <div class="mb-3">
         <label class="block mb-1"><i class="fa-solid fa-file-alt mr-1"></i>Title</label>
         <input type="text" name="title" class="border rounded px-3 py-2 w-full" value="{{ old('title') }}" />
         @error('title')<div class="text-red-600 text-sm">{{ $message }}</div>@enderror
