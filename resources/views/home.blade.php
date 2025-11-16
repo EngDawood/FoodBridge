@@ -15,8 +15,8 @@
     <div class="relative max-w-6xl mx-auto px-4 py-16 md:py-24 lg:py-32">
         <div class="text-center text-white space-y-6">
             <!-- Icon Badge -->
-            <div class="inline-flex items-center justify-center w-20 h-20 bg-white/10 backdrop-blur-sm rounded-2xl mb-4 animate-bounce-slow">
-                <i class="fa-solid fa-bridge text-4xl text-accent-500"></i>
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-white/10 backdrop-blur-sm rounded-2xl mb-4 motion-safe:animate-bounce-slow">
+                <i class="fa-solid fa-bridge text-4xl text-accent-500" aria-hidden="true"></i>
             </div>
 
             <!-- Main Headline -->
@@ -35,13 +35,13 @@
             <div class="flex flex-col sm:flex-row gap-4 justify-center items-center pt-6">
                 <a href="{{ route('register') }}" class="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-accent-500 rounded-xl overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-accent-500/50 min-w-[200px]">
                     <span class="relative z-10 flex items-center">
-                        <i class="fa-solid fa-user-plus mr-2"></i>
+                        <i class="fa-solid fa-user-plus mr-2" aria-hidden="true"></i>
                         Get Started
                     </span>
                     <div class="absolute inset-0 bg-gradient-to-r from-accent-500 to-amber-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </a>
                 <a href="#how-it-works" class="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-white/10 backdrop-blur-sm border-2 border-white/30 rounded-xl hover:bg-white/20 transition-all duration-300 min-w-[200px]">
-                    <i class="fa-solid fa-circle-info mr-2"></i>
+                    <i class="fa-solid fa-circle-info mr-2" aria-hidden="true"></i>
                     Learn More
                 </a>
             </div>
@@ -49,8 +49,8 @@
 
             @auth
             <div class="pt-6">
-                <a href="/profile" class="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-accent-500 rounded-xl hover:scale-105 hover:shadow-2xl transition-all duration-300">
-                    <i class="fa-solid fa-gauge mr-2"></i>
+                <a href="{{ route('profile') }}" class="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-accent-500 rounded-xl hover:scale-105 hover:shadow-2xl transition-all duration-300">
+                    <i class="fa-solid fa-gauge mr-2" aria-hidden="true"></i>
                     Go to Dashboard
                 </a>
             </div>
@@ -500,8 +500,8 @@
         @endguest
 
         @auth
-        <a href="/profile" class="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold bg-white text-accent-500 rounded-xl hover:bg-gray-100 transition-all duration-300">
-            <i class="fa-solid fa-gauge mr-2"></i>
+        <a href="{{ route('profile') }}" class="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold bg-white text-accent-500 rounded-xl hover:bg-gray-100 transition-all duration-300">
+            <i class="fa-solid fa-gauge mr-2" aria-hidden="true"></i>
             Go to Your Dashboard
         </a>
         @endauth
@@ -518,10 +518,13 @@
 
 @push('scripts')
 <script>
-    // Counter Animation
+    // Counter Animation with prefers-reduced-motion support
     document.addEventListener('DOMContentLoaded', function() {
         const counters = document.querySelectorAll('.counter');
         const speed = 200; // Animation speed
+
+        // Check if user prefers reduced motion
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
         const animateCounter = (counter) => {
             const target = +counter.getAttribute('data-target');
@@ -534,11 +537,20 @@
                     counter.textContent = Math.ceil(current);
                     requestAnimationFrame(updateCounter);
                 } else {
-                    counter.textContent = target + (counter.textContent.includes('%') ? '' : '+');
+                    // Add '+' suffix for large numbers, '%' for percentage
+                    const isSatisfactionRate = counter.getAttribute('data-target') === '95';
+                    counter.textContent = target + (isSatisfactionRate ? '%' : '+');
                 }
             };
 
-            updateCounter();
+            if (prefersReducedMotion) {
+                // Skip animation and display final value immediately
+                const isSatisfactionRate = counter.getAttribute('data-target') === '95';
+                counter.textContent = target + (isSatisfactionRate ? '%' : '+');
+                counter.classList.add('animated');
+            } else {
+                updateCounter();
+            }
         };
 
         // Intersection Observer for scroll-triggered animation
@@ -553,14 +565,15 @@
 
         counters.forEach(counter => observer.observe(counter));
 
-        // Smooth scroll for anchor links
+        // Smooth scroll for anchor links with prefers-reduced-motion support
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
+                    const scrollBehavior = prefersReducedMotion ? 'auto' : 'smooth';
                     target.scrollIntoView({
-                        behavior: 'smooth',
+                        behavior: scrollBehavior,
                         block: 'start'
                     });
                 }
