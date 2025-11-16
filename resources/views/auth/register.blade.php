@@ -41,9 +41,21 @@
                 <i class="fa-solid fa-lock mr-1 text-primary-700"></i>Password
             </label>
             <div class="relative">
-                <input id="register-password" name="password" type="password" class="w-full border border-gray-300 rounded-lg px-4 py-3 pr-12 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all" required>
-                <button type="button" id="register-password-toggle" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors">
-                    <i class="fa-solid fa-eye"></i>
+                <input
+                    id="register-password"
+                    name="password"
+                    type="password"
+                    class="w-full border border-gray-300 rounded-lg px-4 py-3 pr-14 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                    required
+                >
+                <button
+                    type="button"
+                    id="register-password-toggle"
+                    class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-600 hover:text-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 rounded-md p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors active:scale-95"
+                    aria-label="Show password"
+                    aria-pressed="false"
+                >
+                    <i class="fa-solid fa-eye text-base" aria-hidden="true"></i>
                 </button>
             </div>
         </div>
@@ -72,26 +84,33 @@
 
 @push('scripts')
 <script>
+// Reusable password toggle functionality with accessibility support
+function initPasswordToggle(inputId, toggleId) {
+    const passwordInput = document.getElementById(inputId);
+    const passwordToggle = document.getElementById(toggleId);
+
+    if (!passwordToggle || !passwordInput) return;
+
+    passwordToggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        const isPassword = passwordInput.type === 'password';
+        passwordInput.type = isPassword ? 'text' : 'password';
+
+        // Update ARIA attributes for accessibility
+        this.setAttribute('aria-pressed', isPassword ? 'true' : 'false');
+        this.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
+
+        // Toggle icon classes
+        const icon = this.querySelector('i');
+        icon.classList.toggle('fa-eye', !isPassword);
+        icon.classList.toggle('fa-eye-slash', isPassword);
+    });
+}
+
+// Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
-    const registerPasswordInput = document.getElementById('register-password');
-    const registerPasswordToggle = document.getElementById('register-password-toggle');
-
-    if (registerPasswordToggle && registerPasswordInput) {
-        registerPasswordToggle.addEventListener('click', function(e) {
-            e.preventDefault();
-            const isPassword = registerPasswordInput.type === 'password';
-            registerPasswordInput.type = isPassword ? 'text' : 'password';
-
-            const icon = registerPasswordToggle.querySelector('i');
-            if (isPassword) {
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-            }
-        });
-    }
+    initPasswordToggle('login-password', 'login-password-toggle');
+    initPasswordToggle('register-password', 'register-password-toggle');
 });
 </script>
 @endpush
